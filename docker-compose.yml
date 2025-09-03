@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: andyja
+      POSTGRES_PASSWORD: andyja
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "pgadmin4@pgadmin4.org"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"   # accessible sur http://localhost:5050
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
